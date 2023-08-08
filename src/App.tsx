@@ -1,6 +1,7 @@
 import { CredentialResponse, GoogleLogin, useGoogleLogin } from '@react-oauth/google';
 import './App.css';
 import { useState } from 'react';
+import { GAPIbaseURL, calendarEventReadOnlyURL, calendarEventURL, calendarReadOnlyURL, calendarURL } from './contants';
 
 function App() {
   const [token, setToken] = useState("")
@@ -8,10 +9,10 @@ function App() {
     console.log(response);
   };
   const onSuccess = useGoogleLogin({
-    scope: ["https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/calendar.readonly"].join(""),
+    scope: [calendarURL, calendarEventURL, calendarReadOnlyURL, calendarEventReadOnlyURL].join(" "),
     onSuccess: (codeResponse) => {
       console.log(codeResponse);
-      fetch(`https://www.googleapis.com/calendar/v3/users/me/calendarList`, {
+      fetch(`${GAPIbaseURL}/calendar/v3/users/me/calendarList`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${codeResponse.access_token}`,
