@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 import Root from './routes/Root';
 import ErrorPage from './routes/ErrorPage';
+import Calendar from './Calendar';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -18,9 +19,13 @@ const root = ReactDOM.createRoot(
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Root />,
+    element: <App />,
     errorElement: <ErrorPage />,
   },
+  {
+    path: "/calendar",
+    element: <Calendar />
+  }
 ]);
 
 
