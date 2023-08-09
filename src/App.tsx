@@ -18,9 +18,9 @@ function App() {
   });
   return (
     <div className="App">
-      <button onClick={() => handleUserLogin()}>
+      {/* <button onClick={() => handleUserLogin()}>
         Sign in with Google 🚀{' '}
-      </button>;
+      </button>; */}
     </div>
   );
 }
