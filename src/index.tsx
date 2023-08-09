@@ -6,27 +6,35 @@ import reportWebVitals from './reportWebVitals';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import {
   createBrowserRouter,
+  createRoutesFromElements,
+  Route,
   RouterProvider,
 } from "react-router-dom";
 import Root from './routes/Root';
 import ErrorPage from './routes/ErrorPage';
 import Calendar from './Calendar';
+import CalendarContext from './context/CalendarContext';
+import CreateCalendar from './CreateCalendar';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/calendar",
-    element: <Calendar />
-  }
-]);
+const routesFromElements = createRoutesFromElements(
+  <Route element={<CalendarContext />}>
+    <Route index element={<App />} errorElement={<ErrorPage />} />
+    <Route
+      path="/calendar"
+      element={<Calendar />}
+    ></Route>
+    <Route
+      path="/calendar/create"
+      element={<CreateCalendar />}
+    />
+  </Route>
+);
+
+const router = createBrowserRouter(routesFromElements);
 
 
 root.render(
