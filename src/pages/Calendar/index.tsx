@@ -42,8 +42,8 @@ export default () => {
                 if (
                     (startEvent?.year === calendar.currentYear)
                     || (endEvent?.year === calendar.currentYear)) {
-                        console.log(event, startEvent?.year, calendar.currentYear, startEvent?.month, endEvent?.month, calendar.currentMonth)
-                    }
+                    console.log(event, startEvent?.year, calendar.currentYear, startEvent?.month, endEvent?.month, calendar.currentMonth)
+                }
             }
         })
         console.log(filteredEvent)
@@ -51,16 +51,19 @@ export default () => {
 
     const fetchEvent = async (primaryCalendar: any) => {
         let calendarEvent, data;
-
-        calendarEvent = await fetch(`${BaseCalendarListAPI}/calendars/${primaryCalendar?.id}/events`, {
+        let timeMin = `${calendar.currentYear}-${(calendar.currentMonth + 1) < 10 ? `0${calendar.currentMonth + 1}` : calendar.currentMonth + 1}-01T00:00:00.000Z`
+        let timeMax = `${calendar.currentYear}-${(calendar.currentMonth + 1) < 10 ? `0${calendar.currentMonth + 1}` : calendar.currentMonth + 1}-${calendar.amountDay}T00:00:00.000Z`
+        let params = `timeMin=${timeMin}&timeMax=${timeMax}`
+       
+        calendarEvent = await fetch(`${BaseCalendarListAPI}/calendars/${primaryCalendar?.id}/events?${params}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
             },
         })
         data = await calendarEvent.json()
-
-        filterEvent(data?.items)
+        console.log("DATA", data)
+        // filterEvent(data?.items)
     }
 
     const fetchCalendar = async () => {
@@ -82,7 +85,7 @@ export default () => {
         const primaryData = response?.items?.find((item: any) => item.accessRole === "owner")
 
 
-        // const eventData = await fetchEvent(primaryData)
+        const eventData = await fetchEvent(primaryData)
         // https://www.googleapis.com/calendar/v3/calendars/calendarId/events
         // if (data) {
         //     setCalendar((state) => ({ ...state, calendarList: data.items }))
