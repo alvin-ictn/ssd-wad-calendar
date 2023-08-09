@@ -12,9 +12,9 @@ import {
 } from "react-router-dom";
 import Root from './routes/Root';
 import ErrorPage from './routes/ErrorPage';
-import Calendar from './Calendar';
-import CalendarContext from './context/CalendarContext';
-import CreateCalendar from './CreateCalendar';
+import CalendarContext from './components/CalendarContext';
+import CreateCalendar from './pages/CreateCalendar';
+import Calendar from './pages/Calendar';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
