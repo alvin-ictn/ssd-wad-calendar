@@ -13,7 +13,7 @@ import {
 import Root from './routes/Root';
 import ErrorPage from './routes/ErrorPage';
 import CalendarContext from './components/CalendarLayout';
-import CreateCalendar from './pages/CreateCalendar';
+import CreateCalendar from './pages/CreateEvent';
 import Calendar from './pages/Calendar';
 
 const root = ReactDOM.createRoot(

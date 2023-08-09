@@ -3,21 +3,26 @@ import Base from "./Components/Base"
 import Cell from "./Components/Cell"
 import { BaseCalendarListAPI, GAPIbaseURL } from "../../constants"
 import { CalendarContext } from "../../components/CalendarLayout"
+import { useNavigate } from "react-router-dom"
 
 export default () => {
     const token = document.cookie.split("ssd-wad-calendar-token=")[1]
     const calendar = useContext(CalendarContext)
+    const navigate = useNavigate()
+
+    console.log("---event",calendar.calendarEvent)
 
     const fetchEvent = async (primaryCalendar: any) => {
-        console.log("PRIM", primaryCalendar)
-        const calendarEvent = await fetch(`${BaseCalendarListAPI}/calendars/${primaryCalendar.id}/events`, {
+        let calendarEvent, data;
+
+        calendarEvent = await fetch(`${BaseCalendarListAPI}/calendars/${primaryCalendar?.id}/events`, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
             },
         })
-        const data = await calendarEvent.json()
-        console.log("EVENT DATA", data)
+        data = await calendarEvent.json()
+        calendar.setEvent(data?.items)
     }
 
     const fetchCalendar = async () => {
@@ -29,9 +34,14 @@ export default () => {
                 "Content-Type": "application/json",
             },
         })
-        const data = await calendarList.json()
-        const primaryData = data.items.find((item: any) => item.accessRole === "owner")
-
+        
+        const response = await calendarList.json()
+        if(response.error) {
+            navigate("/");
+            return
+        }
+        const primaryData = response?.items?.find((item: any) => item.accessRole === "owner")
+        
 
         const eventData = await fetchEvent(primaryData)
         // https://www.googleapis.com/calendar/v3/calendars/calendarId/events
@@ -45,18 +55,18 @@ export default () => {
         // setToken(codeResponse.access_token);
     }
 
-    // useEffect(() => {
-    //     fetchCalendar()
-    // }, [])
+    useEffect(() => {
+        fetchCalendar()
+    }, [])
     let BeginCalendar = [],
         EndCalendar = []
 
     for (let i = calendar.firstDay; i > 0; i--) {
-        BeginCalendar.push(<Cell disabled day={calendar.lastDatePrevMonth - i + 1}></Cell>)
+        BeginCalendar.push(<Cell key={`prev-${i}`} disabled day={calendar.lastDatePrevMonth - i + 1}></Cell>)
     }
 
     for (let i = calendar.lastDay; i < 6; i++) {
-        EndCalendar.push(<Cell disabled day={i - calendar.lastDay + 1}></Cell>)
+        EndCalendar.push(<Cell key={`after-${i}`} disabled day={i - calendar.lastDay + 1}></Cell>)
     }
 
     return <CalendarContext.Provider value={calendar}>
@@ -65,7 +75,7 @@ export default () => {
                 <div className="flex max-w-screen-xl">
                     {new Array(7).fill(null).map((_, index) => {
                         let dayName = new Date(new Date().getFullYear(), new Date().getMonth(), (index + 1) - calendar.firstDay).toLocaleDateString('en-US', { weekday: 'long' })
-                        return <div className="w-60 h-8 justify-center flex">{dayName}</div>
+                        return <div key={dayName} className="w-60 h-8 justify-center flex">{dayName}</div>
 
                     })}
                 </div>
