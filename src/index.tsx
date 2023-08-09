@@ -12,7 +12,7 @@ import {
 } from "react-router-dom";
 import Root from './routes/Root';
 import ErrorPage from './routes/ErrorPage';
-import CalendarContext from './components/CalendarContext';
+import CalendarContext from './components/CalendarLayout';
 import CreateCalendar from './pages/CreateCalendar';
 import Calendar from './pages/Calendar';
 
