@@ -83,21 +83,23 @@ export default () => {
     }
 
     return <CalendarContext.Provider value={calendar}>
-        <Base>
-            <div className="flex max-w-screen-xl">
-                {new Array(7).fill(null).map((_, index) => {
-                    let dayName = new Date(new Date().getFullYear(), new Date().getMonth(), (index + 1) - calendar.firstDay).toLocaleDateString('en-US', { weekday: 'long' })
-                    return <div className="w-60 h-8 justify-center flex">{dayName}</div>
+        <main className="flex place-content-center">
+            <Base>
+                <div className="flex max-w-screen-xl">
+                    {new Array(7).fill(null).map((_, index) => {
+                        let dayName = new Date(new Date().getFullYear(), new Date().getMonth(), (index + 1) - calendar.firstDay).toLocaleDateString('en-US', { weekday: 'long' })
+                        return <div className="w-60 h-8 justify-center flex">{dayName}</div>
 
-                })}
-            </div>
-            <div className="flex max-w-screen-xl flex-wrap">
-                {BeginCalendar}
-                {new Array(calendar.amountDay).fill(null).map((_, i) => {
-                    return <Cell key={i + 1} day={i + 1}></Cell>
-                })}
-                {EndCalendar}
-            </div>
-        </Base>
+                    })}
+                </div>
+                <div className="flex max-w-screen-xl flex-wrap">
+                    {BeginCalendar}
+                    {new Array(calendar.amountDay).fill(null).map((_, i) => {
+                        return <Cell key={i + 1} day={i + 1}></Cell>
+                    })}
+                    {EndCalendar}
+                </div>
+            </Base>
+        </main>
     </CalendarContext.Provider>
 }
