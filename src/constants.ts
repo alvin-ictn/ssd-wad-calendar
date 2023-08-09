@@ -10,7 +10,7 @@ export const calendarEventURL = `${GAPIbaseURL}/auth/calendar.events`
 export const calendarEventReadOnlyURL = `${GAPIbaseURL}/auth/calendar.events.readonly`
 
 // Google API Endpoint
-export const BaseCalendarListAPI = `${GAPIbaseURL}/calendar/v3/users/me/calendarList`
+export const BaseCalendarListAPI = `${GAPIbaseURL}/calendar/v3`
 
 export const SpecificCalendarListAPI = (calendarId: string) => `${BaseCalendarListAPI}/${calendarId}`
 
