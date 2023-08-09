@@ -11,7 +11,9 @@ export const CalendarContext = React.createContext<CalendarContextType>({
     lastDay: new Date(new Date().getFullYear(), new Date().getMonth(), new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate()).getDay(),
     amountDay: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate(), // total day in the month
     lastDatePrevMonth: new Date(new Date().getFullYear(), new Date().getMonth(), 0).getDate(),
+    calendarId: "",
     calendarEvent: [],
+    setCalendarId: () => {},
     setEvent: () => { }
 })
 
@@ -26,13 +28,15 @@ export default () => {
         lastDay: new Date(new Date().getFullYear(), new Date().getMonth(), new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate()).getDay(),
         amountDay: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate(),
         lastDatePrevMonth: new Date(new Date().getFullYear(), new Date().getMonth(), 0).getDate(),
+        calendarId: "",
         calendarEvent: []
     })
 
-    const setEvent = (events: any) => setCalendar((state) => ({ ...state, calendarEvent: events }))
+    const setCalendarId = (calendarId: string) => setCalendar((state) => ({ ...state, calendarId }))
 
+    const setEvent = (events: any) => setCalendar((state) => ({ ...state, calendarEvent: events }))
 
     const outlet = useOutlet()
 
-    return <CalendarContext.Provider value={{ ...calendar, setEvent }}>{outlet}</CalendarContext.Provider>
+    return <CalendarContext.Provider value={{ ...calendar, setEvent, setCalendarId }}>{outlet}</CalendarContext.Provider>
 }

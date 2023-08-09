@@ -118,6 +118,7 @@ export default () => {
         }
         const primaryData = response?.items?.find((item: any) => item.accessRole === "owner")
 
+        if(primaryData) calendar.setCalendarId(primaryData.id)
 
         const eventData = await fetchEvent(primaryData)
 

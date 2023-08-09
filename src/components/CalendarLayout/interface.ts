@@ -8,5 +8,7 @@ export type CalendarContextType = {
     amountDay: number;
     lastDatePrevMonth: number;
     calendarEvent: any[];
+    calendarId: string;
+    setCalendarId: (calendarId: string) => void
     setEvent: (event: any) => void
 };

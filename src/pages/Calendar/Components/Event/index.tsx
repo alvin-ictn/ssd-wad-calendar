@@ -14,9 +14,15 @@ export default ({ event }: any) => {
     }
     let bg = stringToColour(event.id);
 
-    return <div style={{ backgroundColor: bg }} className="w-full">
+    const accessEvent = (e: any) => {
+        e.stopPropagation();
+    }
+    return <div style={{ backgroundColor: bg }} className="w-full relative" onClick={accessEvent}>
+        {/* <div onClick={(e) => e.stopPropagation()} className="absolute z-10 right-0">
+        🗑
+        </div> */}
         <div className="text-slate-50 mix-blend-difference">{event.summary || "No Title"}</div>
         <div className="text-slate-50 mix-blend-difference">{event?.attendees?.map((attender: any) => attender.email).join(", ")}</div>
-        <div>{event?.timeEvent?.startEvent?.time}</div>
+        <div className="text-slate-50 mix-blend-difference">{event?.timeEvent?.startEvent?.time}</div>
     </div>
 }
