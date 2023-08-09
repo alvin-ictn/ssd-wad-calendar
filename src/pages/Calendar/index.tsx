@@ -5,6 +5,7 @@ import { BaseCalendarListAPI, GAPIbaseURL } from "../../constants"
 import { CalendarContext } from "../../components/CalendarLayout"
 import { useNavigate } from "react-router-dom"
 import { eventDate, eventTime } from "./interface/calendar"
+import Event from "./Components/Event"
 
 export default () => {
     const token = document.cookie.split("ssd-wad-calendar-token=")[1]
@@ -20,7 +21,8 @@ export default () => {
                 year: baseDate.getFullYear(),
                 month: baseDate.getMonth(),
                 day: baseDate.getDate(),
-                unix: baseDate.getTime()
+                unix: baseDate.getTime(),
+                time: baseDate.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
             }
         } else if (date.hasOwnProperty("date")) {
             let baseDate = date.date ? new Date(date.date) : new Date("1920-12-17T03:24:00")
@@ -29,7 +31,8 @@ export default () => {
                 year: baseDate.getFullYear(),
                 month: baseDate.getMonth(),
                 day: baseDate.getDate(),
-                unix: baseDate.getTime()
+                unix: baseDate.getTime(),
+                time: baseDate.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
             }
         }
     }
@@ -47,24 +50,21 @@ export default () => {
     }
 
     const filterEvent = (events: any) => {
-        console.log(events)
         let orderedEvent = events.reduce((prev: any, event: any, index: any) => {
             const startEvent = createDateFromEvent(event.start)
             const endEvent = createDateFromEvent(event.end)
-            // console.log(startEvent, endEvent)
+
             let eventDay = startEvent?.day.toString() || "other"
-            console.log(startEvent?.day, endEvent?.day)
             if (startEvent) {
                 if (endEvent?.day !== undefined)
                     if (startEvent.day === endEvent.day)
-                        prev = indexingEvent(prev, eventDay, event)
+                        prev = indexingEvent(prev, eventDay, { ...event, timeEvent: { startEvent, endEvent } })
                     else
                         for (let i: any = startEvent.day; i < endEvent?.day; i++) {
-                            prev = indexingEvent(prev, i.toString(), event)
+                            prev = indexingEvent(prev, i.toString(), { ...event, timeEvent: { startEvent, endEvent } })
                         }
                 else {
-                    prev = indexingEvent(prev, eventDay, event)
-
+                    prev = indexingEvent(prev, eventDay, { ...event, timeEvent: { startEvent, endEvent } })
                 }
 
             }
@@ -77,11 +77,11 @@ export default () => {
             //     if (
             //         (startEvent?.year === calendar.currentYear)
             //         || (endEvent?.year === calendar.currentYear)) {
-            //         console.log(event, startEvent?.year, calendar.currentYear, startEvent?.month, endEvent?.month, calendar.currentMonth)
-            //     }
+            //         
             // }
         }, {})
-        console.log(orderedEvent)
+
+        return orderedEvent
     }
 
     const fetchEvent = async (primaryCalendar: any) => {
@@ -98,7 +98,7 @@ export default () => {
         })
         data = await calendarEvent.json()
 
-        filterEvent(data?.items)
+        return filterEvent(data?.items)
     }
 
     const fetchCalendar = async () => {
@@ -116,11 +116,14 @@ export default () => {
             navigate("/");
             return
         }
-        console.log("RESPONSE", response.items)
         const primaryData = response?.items?.find((item: any) => item.accessRole === "owner")
 
 
         const eventData = await fetchEvent(primaryData)
+
+        if (eventData) {
+            calendar.setEvent(eventData)
+        }
         // https://www.googleapis.com/calendar/v3/calendars/calendarId/events
         // if (data) {
         //     setCalendar((state) => ({ ...state, calendarList: data.items }))
@@ -160,7 +163,12 @@ export default () => {
                 <div className="flex max-w-screen-xl flex-wrap">
                     {BeginCalendar}
                     {new Array(calendar.amountDay).fill(null).map((_, i) => {
-                        return <Cell key={i + 1} day={i + 1}></Cell>
+                        let eventOnDay = calendar.calendarEvent[i + 1]?.reverse();
+              
+                        return <Cell key={i + 1} day={i + 1}>
+                            {eventOnDay?.map((eventItem: any) =>
+                                <Event key={eventItem.id} event={eventItem}></Event>)}
+                        </Cell>
                     })}
                     {EndCalendar}
                 </div>

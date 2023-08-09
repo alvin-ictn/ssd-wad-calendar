@@ -10,4 +10,5 @@ export interface eventTime {
     month: Number
     day: Number
     unix: Number
+    time: string
 }
