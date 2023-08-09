@@ -4,13 +4,50 @@ import Cell from "./Components/Cell"
 import { BaseCalendarListAPI, GAPIbaseURL } from "../../constants"
 import { CalendarContext } from "../../components/CalendarLayout"
 import { useNavigate } from "react-router-dom"
+import { eventDate, eventTime } from "./interface/calendar"
 
 export default () => {
     const token = document.cookie.split("ssd-wad-calendar-token=")[1]
     const calendar = useContext(CalendarContext)
     const navigate = useNavigate()
 
-    console.log("---event",calendar.calendarEvent)
+    const createDateFromEvent = (date: eventDate): eventTime | undefined => {
+        if (date === undefined) return undefined
+        if (date.hasOwnProperty("dateTime")) {
+            let baseDate = date.dateTime ? new Date(date.dateTime) : new Date("1920-12-17T03:24:00")
+            return {
+                base: baseDate,
+                year: baseDate.getFullYear(),
+                month: baseDate.getMonth(),
+                day: baseDate.getDate(),
+                unix: baseDate.getTime()
+            }
+        } else if (date.hasOwnProperty("date")) {
+            let baseDate = date.date ? new Date(date.date) : new Date("1920-12-17T03:24:00")
+            return {
+                base: baseDate,
+                year: baseDate.getFullYear(),
+                month: baseDate.getMonth(),
+                day: baseDate.getDate(),
+                unix: baseDate.getTime()
+            }
+        }
+    }
+
+    const filterEvent = (events: any) => {
+        let filteredEvent = events.filter((event: any) => {
+            const startEvent = createDateFromEvent(event.start)
+            const endEvent = createDateFromEvent(event.end)
+            if (startEvent !== undefined || endEvent !== undefined) {
+                if (
+                    (startEvent?.year === calendar.currentYear)
+                    || (endEvent?.year === calendar.currentYear)) {
+                        console.log(event, startEvent?.year, calendar.currentYear, startEvent?.month, endEvent?.month, calendar.currentMonth)
+                    }
+            }
+        })
+        console.log(filteredEvent)
+    }
 
     const fetchEvent = async (primaryCalendar: any) => {
         let calendarEvent, data;
@@ -22,7 +59,8 @@ export default () => {
             },
         })
         data = await calendarEvent.json()
-        calendar.setEvent(data?.items)
+
+        filterEvent(data?.items)
     }
 
     const fetchCalendar = async () => {
@@ -34,16 +72,17 @@ export default () => {
                 "Content-Type": "application/json",
             },
         })
-        
+
         const response = await calendarList.json()
-        if(response.error) {
+        if (response.error) {
             navigate("/");
             return
         }
+        console.log("RESPONSE", response.items)
         const primaryData = response?.items?.find((item: any) => item.accessRole === "owner")
-        
 
-        const eventData = await fetchEvent(primaryData)
+
+        // const eventData = await fetchEvent(primaryData)
         // https://www.googleapis.com/calendar/v3/calendars/calendarId/events
         // if (data) {
         //     setCalendar((state) => ({ ...state, calendarList: data.items }))
@@ -58,6 +97,7 @@ export default () => {
     useEffect(() => {
         fetchCalendar()
     }, [])
+
     let BeginCalendar = [],
         EndCalendar = []
 
