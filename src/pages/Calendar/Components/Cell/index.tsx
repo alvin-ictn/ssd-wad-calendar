@@ -11,9 +11,9 @@ export default ({ day, disabled, children }: any) => {
     }
 
     return (
-        <div onClick={createEvent} className={`${disabled ? "bg-slate-500" : "cursor-pointer hover:bg-sky-300"} flex flex-col items-center w-[calc(100%/7)] h-60 border border-slate-300 p-2`}>
+        <div onClick={createEvent} className={`${disabled ? "bg-slate-500" : "cursor-pointer hover:bg-sky-300"} flex flex-col items-center w-[calc(100%/7)] h-60 border border-slate-300 p-2 overflow-hidden`}>
             <div className={`${current == day && "bg-blue-500 text-white"} text-bold rounded-full w-5 h-5 flex items-center justify-center`}>{day}</div>
-            <div>{children}</div>
+            <div className="w-full">{children}</div>
         </div>
     )
 }

@@ -14,7 +14,7 @@ export default ({ event }: any) => {
     }
     let bg = stringToColour(event.id);
 
-    return <div style={{ backgroundColor: bg }} className="">
+    return <div style={{ backgroundColor: bg }} className="w-full">
         <div className="text-slate-50 mix-blend-difference">{event.summary || "No Title"}</div>
         <div className="text-slate-50 mix-blend-difference">{event?.attendees?.map((attender: any) => attender.email).join(", ")}</div>
         <div>{event?.timeEvent?.startEvent?.time}</div>
