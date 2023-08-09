@@ -34,19 +34,54 @@ export default () => {
         }
     }
 
+    const indexingEvent = (base: any, index: any, event: any) => {
+        if (base[index] == undefined) {
+            let arrayEvent = []
+            arrayEvent?.push(event)
+            Object.assign(base, { [index]: arrayEvent })
+        }
+        else
+            base[index] = [...base[index], event]
+
+        return base
+    }
+
     const filterEvent = (events: any) => {
-        let filteredEvent = events.filter((event: any) => {
+        console.log(events)
+        let orderedEvent = events.reduce((prev: any, event: any, index: any) => {
             const startEvent = createDateFromEvent(event.start)
             const endEvent = createDateFromEvent(event.end)
-            if (startEvent !== undefined || endEvent !== undefined) {
-                if (
-                    (startEvent?.year === calendar.currentYear)
-                    || (endEvent?.year === calendar.currentYear)) {
-                    console.log(event, startEvent?.year, calendar.currentYear, startEvent?.month, endEvent?.month, calendar.currentMonth)
+            // console.log(startEvent, endEvent)
+            let eventDay = startEvent?.day.toString() || "other"
+            console.log(startEvent?.day, endEvent?.day)
+            if (startEvent) {
+                if (endEvent?.day !== undefined)
+                    if (startEvent.day === endEvent.day)
+                        prev = indexingEvent(prev, eventDay, event)
+                    else
+                        for (let i: any = startEvent.day; i < endEvent?.day; i++) {
+                            prev = indexingEvent(prev, i.toString(), event)
+                        }
+                else {
+                    prev = indexingEvent(prev, eventDay, event)
+
                 }
+
             }
-        })
-        console.log(filteredEvent)
+
+            // if(endEvent) {
+            //     if(prev[eventDay].find(item => item.))
+            // }
+            return prev
+            // if (startEvent !== undefined || endEvent !== undefined) {
+            //     if (
+            //         (startEvent?.year === calendar.currentYear)
+            //         || (endEvent?.year === calendar.currentYear)) {
+            //         console.log(event, startEvent?.year, calendar.currentYear, startEvent?.month, endEvent?.month, calendar.currentMonth)
+            //     }
+            // }
+        }, {})
+        console.log(orderedEvent)
     }
 
     const fetchEvent = async (primaryCalendar: any) => {
@@ -54,7 +89,7 @@ export default () => {
         let timeMin = `${calendar.currentYear}-${(calendar.currentMonth + 1) < 10 ? `0${calendar.currentMonth + 1}` : calendar.currentMonth + 1}-01T00:00:00.000Z`
         let timeMax = `${calendar.currentYear}-${(calendar.currentMonth + 1) < 10 ? `0${calendar.currentMonth + 1}` : calendar.currentMonth + 1}-${calendar.amountDay}T00:00:00.000Z`
         let params = `timeMin=${timeMin}&timeMax=${timeMax}`
-       
+
         calendarEvent = await fetch(`${BaseCalendarListAPI}/calendars/${primaryCalendar?.id}/events?${params}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -62,8 +97,8 @@ export default () => {
             },
         })
         data = await calendarEvent.json()
-        console.log("DATA", data)
-        // filterEvent(data?.items)
+
+        filterEvent(data?.items)
     }
 
     const fetchCalendar = async () => {
