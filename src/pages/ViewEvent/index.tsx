@@ -35,7 +35,7 @@ export default () => {
         setEventData((state) => ({
             ...state,
             id: response.id,
-            attendees: response.attendes || [response.creator],
+            attendees: response.attendees || [response.creator],
             start: response.start,
             end: response.end,
             startTime: new Date(response?.start?.date || response?.start?.dateTime)?.toTimeString().slice(0, 5),
@@ -45,11 +45,11 @@ export default () => {
     }
 
     const onChangeEventData = (e: any) => {
-        if (e.target.name.includes("attendes")) {
+        if (e.target.name.includes("attendees")) {
             const index = e.target.name.split(".")[1];
-            let attendes = eventData.attendees ? [...eventData.attendees] : [];
-            attendes[index] = e.target.value
-            setEventData((state) => ({ ...state, "attendes": attendes }))
+            let attendees = eventData.attendees ? [...eventData.attendees] : [];
+            attendees[index] = e.target.value
+            setEventData((state) => ({ ...state, "attendees": attendees }))
         } else if (e.target.name === "start") {
             let start = {
                 "dateTime": `2023-08-12T${e.target.value}:00+07:00`,
