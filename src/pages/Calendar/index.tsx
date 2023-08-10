@@ -1,11 +1,11 @@
-import React, { useContext, useEffect } from "react"
+import { useContext, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
+import { CalendarContext } from "../../components/CalendarLayout"
+import { BaseCalendarListAPI } from "../../constants"
 import Base from "./Components/Base"
 import Cell from "./Components/Cell"
-import { BaseCalendarListAPI, GAPIbaseURL } from "../../constants"
-import { CalendarContext } from "../../components/CalendarLayout"
-import { useNavigate } from "react-router-dom"
-import { eventDate, eventTime } from "./interface/calendar"
 import Event from "./Components/Event"
+import { eventDate, eventTime } from "./interface/calendar"
 
 export default () => {
     const token = document.cookie.split("ssd-wad-calendar-token=")[1]
@@ -69,16 +69,7 @@ export default () => {
 
             }
 
-            // if(endEvent) {
-            //     if(prev[eventDay].find(item => item.))
-            // }
             return prev
-            // if (startEvent !== undefined || endEvent !== undefined) {
-            //     if (
-            //         (startEvent?.year === calendar.currentYear)
-            //         || (endEvent?.year === calendar.currentYear)) {
-            //         
-            // }
         }, {})
 
         return orderedEvent
@@ -128,15 +119,6 @@ export default () => {
         if (eventData) {
             calendar.setEvent(eventData)
         }
-        // https://www.googleapis.com/calendar/v3/calendars/calendarId/events
-        // if (data) {
-        //     setCalendar((state) => ({ ...state, calendarList: data.items }))
-        // }
-        // let fullEvent = await data?.items?.map(async (calendarItem: any) => {
-        //     https://www.googleapis.com/calendar/v3/calendars/calendarId/events
-        //     await fetch(`${BaseCalendarListAPI}/`)
-        // })
-        // setToken(codeResponse.access_token);
     }
 
     useEffect(() => {
