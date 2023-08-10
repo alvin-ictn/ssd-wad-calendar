@@ -11,7 +11,7 @@ export const CalendarContext = React.createContext<CalendarContextType>({
     lastDay: new Date(new Date().getFullYear(), new Date().getMonth(), new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate()).getDay(),
     amountDay: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate(), // total day in the month
     lastDatePrevMonth: new Date(new Date().getFullYear(), new Date().getMonth(), 0).getDate(),
-    calendarId: "",
+    calendarId: localStorage.getItem("primaryId") || "",
     calendarEvent: [],
     setCalendarId: () => {},
     setEvent: () => { }
@@ -28,7 +28,7 @@ export default () => {
         lastDay: new Date(new Date().getFullYear(), new Date().getMonth(), new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate()).getDay(),
         amountDay: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate(),
         lastDatePrevMonth: new Date(new Date().getFullYear(), new Date().getMonth(), 0).getDate(),
-        calendarId: "",
+        calendarId: localStorage.getItem("primaryId") || "",
         calendarEvent: []
     })
 

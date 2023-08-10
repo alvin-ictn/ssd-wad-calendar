@@ -1,4 +1,7 @@
+import { useNavigate } from "react-router-dom";
+
 export default ({ event }: any) => {
+    const navigate = useNavigate()
 
     const stringToColour = (str: string) => {
         let hash = 0;
@@ -14,10 +17,11 @@ export default ({ event }: any) => {
     }
     let bg = stringToColour(event.id);
 
-    const accessEvent = (e: any) => {
+    const accessEvent = (e: any, eventId: string) => {
         e.stopPropagation();
+        navigate(`/calendar/${eventId}`)
     }
-    return <div style={{ backgroundColor: bg }} className="w-full relative" onClick={accessEvent}>
+    return <div style={{ backgroundColor: bg }} className="w-full relative" onClick={(e) => accessEvent(e, event.id)}>
         {/* <div onClick={(e) => e.stopPropagation()} className="absolute z-10 right-0">
         🗑
         </div> */}

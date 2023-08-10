@@ -15,6 +15,7 @@ import ErrorPage from './routes/ErrorPage';
 import CalendarContext from './components/CalendarLayout';
 import CreateCalendar from './pages/CreateEvent';
 import Calendar from './pages/Calendar';
+import ViewEvent from './pages/ViewEvent';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -30,6 +31,10 @@ const routesFromElements = createRoutesFromElements(
     <Route
       path="/calendar/create"
       element={<CreateCalendar />}
+    />
+    <Route
+      path="/calendar/:eventId"
+      element={<ViewEvent />}
     />
   </Route>
 );

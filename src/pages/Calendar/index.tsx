@@ -118,7 +118,10 @@ export default () => {
         }
         const primaryData = response?.items?.find((item: any) => item.accessRole === "owner")
 
-        if(primaryData) calendar.setCalendarId(primaryData.id)
+        if (primaryData) {
+            calendar.setCalendarId(primaryData.id)
+            localStorage.setItem("primaryId", primaryData.id)
+        }
 
         const eventData = await fetchEvent(primaryData)
 
@@ -165,7 +168,7 @@ export default () => {
                     {BeginCalendar}
                     {new Array(calendar.amountDay).fill(null).map((_, i) => {
                         let eventOnDay = calendar.calendarEvent[i + 1]?.reverse();
-              
+
                         return <Cell key={i + 1} day={i + 1}>
                             {eventOnDay?.map((eventItem: any) =>
                                 <Event key={eventItem.id} event={eventItem}></Event>)}
