@@ -4,10 +4,7 @@ import { BaseCalendarListAPI } from "../../constants"
 import { useNavigate, useParams } from "react-router-dom"
 import { useEffect } from "react"
 import { useState } from "react"
-import { z } from "zod"
 import { eventData } from "./interface"
-
-// const EventValidator = z.object({})
 
 export default () => {
     const calendar = useContext(CalendarContext)
@@ -31,7 +28,7 @@ export default () => {
             navigate("/");
             return
         }
-        
+
         setEventData((state) => ({
             ...state,
             id: response.id,
@@ -51,12 +48,16 @@ export default () => {
             attendees[index] = e.target.value
             setEventData((state) => ({ ...state, "attendees": attendees }))
         } else if (e.target.name === "start") {
+            let year = new Date(eventData.start.dateTime).getFullYear()
+            let month = new Date(eventData.start.dateTime).getMonth() + 1
+            let day = new Date(eventData.start.dateTime).getDate();
+
             let start = {
-                "dateTime": `2023-08-12T${e.target.value}:00+07:00`,
+                "dateTime": `${year}-${month < 10 ? `0${month}` : month}-${day < 10 ? `0${day}` : day}T${e.target.value}:00+07:00`,
                 "timeZone": "Asia/Jakarta"
             }
             let end = {
-                "dateTime": `2023-08-12T${e.target.value}:59+07:00`,
+                "dateTime": `${year}-${month < 10 ? `0${month}` : month}-${day < 10 ? `0${day}` : day}T${e.target.value}:59+07:00`,
                 "timeZone": "Asia/Jakarta"
             }
             setEventData((state) => ({ ...state, start, end }))
