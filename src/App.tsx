@@ -8,7 +8,6 @@ function App() {
   const handleUserLogin = useGoogleLogin({
     scope: [calendarURL, calendarEventURL, calendarReadOnlyURL, calendarEventReadOnlyURL].join(" "),
     onSuccess: (codeResponse) => {
-      console.log(codeResponse);
       let expires = (new Date(Date.now() + codeResponse.expires_in * 1000)).toUTCString();
       document.cookie = `ssd-wad-calendar-token=${codeResponse.access_token}; expires=${expires};path=/;`;
       navigate("/calendar")

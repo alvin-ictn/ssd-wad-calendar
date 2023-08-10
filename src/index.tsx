@@ -1,21 +1,20 @@
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import { GoogleOAuthProvider } from '@react-oauth/google';
 import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
   RouterProvider,
 } from "react-router-dom";
-import Root from './routes/Root';
-import ErrorPage from './routes/ErrorPage';
+import App from './App';
 import CalendarContext from './components/CalendarLayout';
-import CreateCalendar from './pages/CreateEvent';
+import './index.css';
 import Calendar from './pages/Calendar';
+import CreateCalendar from './pages/CreateEvent';
 import ViewEvent from './pages/ViewEvent';
+import reportWebVitals from './reportWebVitals';
+import ErrorPage from './routes/ErrorPage';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
