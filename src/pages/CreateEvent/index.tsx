@@ -1,44 +1,15 @@
-import { useContext } from "react"
+import { useContext, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { CalendarContext } from "../../components/CalendarLayout"
 import { BaseCalendarListAPI } from "../../constants"
-import { useNavigate, useParams } from "react-router-dom"
-import { useEffect } from "react"
-import { useState } from "react"
-import { z } from "zod"
 import { eventData } from "../ViewEvent/interface"
 
-// const EventValidator = z.object({})
 export default () => {
-    const EventValidator = z.object({})
     const calendar = useContext(CalendarContext)
-    let { eventId } = useParams();
     let navigate = useNavigate()
     const [eventData, setEventData] = useState<eventData>({})
 
     const token = document.cookie.split("ssd-wad-calendar-token=")[1]
-
-    const fetchEvent = async () => {
-        const eventData = await fetch(`${BaseCalendarListAPI}/calendars/${calendar.calendarId}/events/${eventId}`, {
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
-        })
-
-        const response = await eventData.json()
-
-        setEventData((state) => ({
-            ...state,
-            id: response.id,
-            attendees: response.attendes || [response.creator],
-            start: response.start,
-            end: response.end,
-            startTime: new Date(response?.start?.date || response?.start?.dateTime)?.toTimeString().slice(0, 5),
-            summary: response.summary,
-            organizer: response.organizer
-        }))
-    }
 
     const onChangeEventData = (e: any) => {
         let dateEvent = localStorage.getItem('create-day-event')
@@ -64,7 +35,7 @@ export default () => {
 
     const createEvent = async () => {
         let body = JSON.parse(JSON.stringify(eventData))
-        const updateAction = await fetch(`${BaseCalendarListAPI}/calendars/${calendar.calendarId}/events`, {
+        const createAction = await fetch(`${BaseCalendarListAPI}/calendars/${calendar.calendarId}/events`, {
             method: "POST",
             body: JSON.stringify(body),
             headers: {
@@ -72,27 +43,12 @@ export default () => {
                 "Content-Type": "application/json",
             },
         })
-        const data = await updateAction.json()
-        console.log("DATA", data)
-    }
-
-    const deleteEvent = async () => {
-        const deleteAction = await fetch(`${BaseCalendarListAPI}/calendars/${calendar.calendarId}/events/${eventId}`, {
-            method: "DELETE",
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
-        })
-
-        if (deleteAction.ok) {
+        
+        if(createAction.ok) {
             navigate("/calendar")
         }
     }
 
-    useEffect(() => {
-        fetchEvent()
-    }, [])
     return <div className="flex flex-col p-20">
         <div className="mb-10 flex justify-between">
             <div className="flex items-center gap-4">
